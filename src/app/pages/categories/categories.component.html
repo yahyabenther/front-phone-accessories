@@ -1,0 +1,117 @@
+<div class="admin-layout">
+
+  <nav class="navbar">
+    <div class="logo">📱 AccessoryStore Admin</div>
+
+    <div class="nav-links">
+      <a>Accessories</a>
+      <a class="active">Categories</a>
+      <a>Brands</a>
+      <a class="logout">Logout</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <h1>Categories Management</h1>
+    <p>Organize your phone accessories by category.</p>
+  </section>
+
+  <div *ngIf="message" class="message" [class.success]="messageType === 'success'" [class.error]="messageType === 'error'">
+    {{ message }}
+  </div>
+
+  <section class="table-section">
+
+    <div class="table-header">
+      <div>
+        <h2>Category List</h2>
+        <span>{{ categories.length }} categories</span>
+      </div>
+
+      <button class="btn-save" (click)="openAddForm()"> Add </button>
+    </div>
+
+    <section class="form-section" *ngIf="showForm">
+      <h2>{{ form.id ? 'Update Category' : 'Create New Category' }}</h2>
+
+      <form (ngSubmit)="onSave()">
+        <div class="form-group">
+          <label>Category Name</label>
+          <input
+            type="text"
+            [(ngModel)]="form.name"
+            name="name"
+            placeholder="Example: Chargers"
+          />
+
+          <small class="field-error" *ngIf="submitted && !form.name.trim()">
+            Category name is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea
+            [(ngModel)]="form.description"
+            name="description"
+            placeholder="Write a short category description..."
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-save">
+            {{ form.id ? 'Update Category' : 'Add Category' }}
+          </button>
+
+          <button type="button" class="btn-cancel" (click)="onCancel()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <table *ngIf="categories.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let c of categories">
+          <td>{{ c.id }}</td>
+          <td class="category-name">{{ c.name }}</td>
+          <td>{{ c.description || 'No description' }}</td>
+          <td class="actions">
+            <button class="edit" (click)="onEdit(c)">Edit</button>
+            <button class="delete" (click)="openDeleteModal(c)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="empty" *ngIf="categories.length === 0">
+      No categories found.
+    </div>
+
+  </section>
+
+  <div class="modal-backdrop" *ngIf="categoryToDelete">
+    <div class="modal-box">
+      <h3>Delete Category</h3>
+      <p>
+        Are you sure you want to delete
+        <strong>{{ categoryToDelete.name }}</strong>?
+      </p>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="cancelDelete()">No</button>
+        <button class="delete" (click)="confirmDelete()">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+</div>
