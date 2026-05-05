@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Category } from '../models/category.model';
-
-const API_URL = 'http://localhost:8081/api/categories';
-
+const API_URL = 'http://localhost:8081/api/categories'; 
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
 
