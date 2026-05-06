@@ -11,6 +11,12 @@
   z-index: 10;
 }
 
+.logo {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 800;
+}
+
 .nav-links {
   display: flex;
   align-items: center;
@@ -23,7 +29,6 @@
     border-radius: 12px;
     font-weight: 700;
     cursor: pointer;
-    transition: 0.25s;
 
     &:hover,
     &.active {
@@ -35,9 +40,19 @@
   .logout {
     background: #ef4444;
     color: #fff;
+  }
+}
 
-    &:hover {
-      background: #dc2626;
-    }
+@media (max-width: 850px) {
+  .navbar {
+    height: auto;
+    padding: 20px;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }

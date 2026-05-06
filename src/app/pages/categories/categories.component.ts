@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { Category } from '../../models/category.model';
 import { CategoryService } from '../../services/category.service';
 
@@ -37,13 +38,15 @@ export class CategoriesComponent implements OnInit {
   loadCategories(): void {
     this.categoryService.getAll().subscribe({
       next: data => this.categories = data,
-      error: () => this.showMessage('Failed to load categories.', 'error')
+      error: () => this.showMessage('Failed to load categories', 'error')
     });
   }
 
   openAddForm(): void {
     this.showForm = true;
     this.submitted = false;
+    this.categoryToDelete = null;
+
     this.form = {
       name: '',
       description: ''
@@ -53,12 +56,15 @@ export class CategoriesComponent implements OnInit {
   onEdit(category: Category): void {
     this.showForm = true;
     this.submitted = false;
+    this.categoryToDelete = null;
+
     this.form = { ...category };
   }
 
   onCancel(): void {
     this.showForm = false;
     this.submitted = false;
+
     this.form = {
       name: '',
       description: ''
@@ -68,12 +74,17 @@ export class CategoriesComponent implements OnInit {
   onSave(): void {
     this.submitted = true;
 
-    if (!this.form.name || !this.form.name.trim()) {
+    if (!this.form.name.trim()) {
       return;
     }
 
+    const payload: Category = {
+      name: this.form.name.trim(),
+      description: this.form.description?.trim() || ''
+    };
+
     if (this.form.id) {
-      this.categoryService.update(this.form.id, this.form).subscribe({
+      this.categoryService.update(this.form.id, payload).subscribe({
         next: () => {
           this.showMessage('Category updated successfully', 'success');
           this.onCancel();
@@ -82,9 +93,9 @@ export class CategoriesComponent implements OnInit {
         error: () => this.showMessage('Failed to update category', 'error')
       });
     } else {
-      this.categoryService.create(this.form).subscribe({
+      this.categoryService.create(payload).subscribe({
         next: () => {
-          this.showMessage('Category added successfully.', 'success');
+          this.showMessage('Category added successfully', 'success');
           this.onCancel();
           this.loadCategories();
         },

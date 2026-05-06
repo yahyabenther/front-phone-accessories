@@ -1,20 +1,13 @@
 :host {
   display: block;
-  min-height: 100vh;
+  min-height: calc(100vh - 76px);
   background: #f4f7fb;
   font-family: 'Segoe UI', sans-serif;
   color: #1f2937;
 }
 
 .admin-layout {
-  min-height: 100vh;
-}
-
-
-.logo {
-  color: #fff;
-  font-size: 22px;
-  font-weight: 800;
+  min-height: calc(100vh - 76px);
 }
 
 .hero {
@@ -34,7 +27,6 @@
   p {
     margin: 10px 0 0;
     font-size: 17px;
-    opacity: 0.95;
   }
 }
 
@@ -90,16 +82,85 @@
   }
 }
 
-.btn-add-main {
+button {
+  border: none;
+  cursor: pointer;
+  font-weight: 800;
+  border-radius: 12px;
+  transition: 0.25s;
+}
+
+.btn-add-main,
+.btn-save {
   background: #2563eb;
   color: white;
   padding: 12px 18px;
-  font-weight: 800;
-  border-radius: 12px;
 
   &:hover {
     background: #1d4ed8;
     transform: translateY(-2px);
+  }
+}
+
+.filter-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 18px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  align-items: end;
+}
+
+.filter-group {
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 750;
+    color: #374151;
+  }
+
+  select {
+    width: 100%;
+    border: 1px solid #dbe3ef;
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-size: 15px;
+
+    &:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+  }
+}
+
+.filter-actions {
+  display: flex;
+  gap: 12px;
+  white-space: nowrap;
+}
+
+.btn-filter {
+  background: #2563eb;
+  color: white;
+  padding: 12px 18px;
+
+  &:hover {
+    background: #1d4ed8;
+  }
+}
+
+.btn-reset {
+  background: #64748b;
+  color: white;
+  padding: 12px 18px;
+
+  &:hover {
+    background: #475569;
   }
 }
 
@@ -117,9 +178,13 @@
   }
 }
 
-.form-group {
-  margin-bottom: 18px;
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
 
+.form-group {
   label {
     display: block;
     margin-bottom: 8px;
@@ -128,25 +193,19 @@
   }
 
   input,
-  textarea {
+  select {
     width: 100%;
     border: 1px solid #dbe3ef;
     background: #fff;
     border-radius: 14px;
     padding: 14px 16px;
     font-size: 15px;
-    transition: 0.25s;
 
     &:focus {
       outline: none;
       border-color: #2563eb;
       box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
     }
-  }
-
-  textarea {
-    min-height: 110px;
-    resize: vertical;
   }
 }
 
@@ -160,31 +219,13 @@
 .form-actions {
   display: flex;
   gap: 12px;
-}
-
-button {
-  border: none;
-  cursor: pointer;
-  font-weight: 800;
-  border-radius: 12px;
-  transition: 0.25s;
-}
-
-.btn-save {
-  background: #2563eb;
-  color: white;
-  padding: 13px 22px;
-
-  &:hover {
-    background: #1d4ed8;
-    transform: translateY(-2px);
-  }
+  margin-top: 20px;
 }
 
 .btn-cancel {
   background: #64748b;
   color: white;
-  padding: 13px 22px;
+  padding: 12px 18px;
 
   &:hover {
     background: #475569;
@@ -194,7 +235,6 @@ button {
 table {
   width: 100%;
   border-collapse: collapse;
-  overflow: hidden;
 }
 
 th {
@@ -206,23 +246,28 @@ th {
   text-transform: uppercase;
 }
 
-th:last-child {
-  text-align: center;
-}
-
 td {
   padding: 18px;
   border-bottom: 1px solid #eef2f7;
   color: #334155;
 }
 
+th:last-child,
 td:last-child {
   text-align: center;
 }
 
-.category-name {
+.item-name {
   font-weight: 900;
   color: #111827;
+}
+
+.stock-badge {
+  background: #dcfce7;
+  color: #166534;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-weight: 900;
 }
 
 .actions {
@@ -306,18 +351,6 @@ tbody tr:hover {
 }
 
 @media (max-width: 850px) {
-  .navbar {
-    height: auto;
-    padding: 20px;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .nav-links {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
   .hero,
   .table-section,
   .message {
@@ -325,15 +358,22 @@ tbody tr:hover {
     margin-right: 18px;
   }
 
+ .filter-section {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-actions {
+    align-items: stretch;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
   .table-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 14px;
-
-    div {
-      flex-direction: column;
-      align-items: flex-start;
-    }
   }
 
   table {

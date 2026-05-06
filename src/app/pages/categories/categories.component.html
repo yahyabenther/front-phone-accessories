@@ -1,10 +1,8 @@
 <div class="admin-layout">
 
-
-
   <section class="hero">
     <h1>Categories Management</h1>
-    <p>Organize your phone accessories by category.</p>
+    <p>Organize your phone accessories by category</p>
   </section>
 
   <div *ngIf="message" class="message" [class.success]="messageType === 'success'" [class.error]="messageType === 'error'">
@@ -19,7 +17,7 @@
         <span>{{ categories.length }} categories</span>
       </div>
 
-      <button class="btn-save" (click)="openAddForm()"> Add </button>
+      <button class="btn-save" (click)="openAddForm()"> + Add Category </button>
     </div>
 
     <section class="form-section" *ngIf="showForm">

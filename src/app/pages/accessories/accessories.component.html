@@ -1,0 +1,194 @@
+<div class="admin-layout">
+
+  <section class="hero">
+    <h1>Accessories Management</h1>
+    <p>Create, update, filter and delete phone accessories</p>
+  </section>
+
+  <div
+    *ngIf="message"
+    class="message"
+    [class.success]="messageType === 'success'"
+    [class.error]="messageType === 'error'"
+  >
+    {{ message }}
+  </div>
+
+  <section class="table-section">
+
+    <div class="table-header">
+      <div>
+        <h2>Accessory List</h2>
+        <span>{{ accessories.length }} accessories</span>
+      </div>
+
+      <button class="btn-add-main" type="button" (click)="openAddForm()">
+        + Add Accessory
+      </button>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-group">
+        <label>Filter by Category</label>
+        <select [(ngModel)]="filterCategoryId" name="filterCategoryId">
+          <option [ngValue]="0">All categories</option>
+          <option *ngFor="let c of categories" [ngValue]="c.id">
+            {{ c.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Filter by Brand</label>
+        <select [(ngModel)]="filterBrandId" name="filterBrandId">
+          <option [ngValue]="0">All brands</option>
+          <option *ngFor="let b of brands" [ngValue]="b.id">
+            {{ b.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-actions">
+        <button class="btn-filter" type="button" (click)="applyFilter()">Filter</button>
+        <button class="btn-reset" type="button" (click)="resetFilter()">Reset</button>
+      </div>
+    </div>
+
+    <section class="form-section" *ngIf="showForm">
+      <h2>{{ form.id ? 'Update Accessory' : 'Create New Accessory' }}</h2>
+
+      <form (ngSubmit)="onSave()">
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Accessory Name</label>
+            <input
+              type="text"
+              [(ngModel)]="form.name"
+              name="name"
+              placeholder="Example: Fast Charger"
+            />
+            <small class="field-error" *ngIf="submitted && !form.name.trim()">
+              Accessory name is required.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label>Price</label>
+            <input
+              type="number"
+              [(ngModel)]="form.price"
+              name="price"
+              placeholder="Example: 25"
+            />
+            <small class="field-error" *ngIf="submitted && form.price < 0">
+              Price must be positive.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label>Stock</label>
+            <input
+              type="number"
+              [(ngModel)]="form.stock"
+              name="stock"
+              placeholder="Example: 50"
+            />
+            <small class="field-error" *ngIf="submitted && form.stock < 0">
+              Stock must be positive.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label>Category</label>
+            <select [(ngModel)]="selectedCategoryId" name="categoryId">
+              <option [ngValue]="0">Select category</option>
+              <option *ngFor="let c of categories" [ngValue]="c.id">
+                {{ c.name }}
+              </option>
+            </select>
+            <small class="field-error" *ngIf="submitted && !selectedCategoryId">
+              Category is required.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label>Brand</label>
+            <select [(ngModel)]="selectedBrandId" name="brandId">
+              <option [ngValue]="0">Select brand</option>
+              <option *ngFor="let b of brands" [ngValue]="b.id">
+                {{ b.name }}
+              </option>
+            </select>
+            <small class="field-error" *ngIf="submitted && !selectedBrandId">
+              Brand is required.
+            </small>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-save">
+            {{ form.id ? 'Update Accessory' : 'Add Accessory' }}
+          </button>
+
+          <button type="button" class="btn-cancel" (click)="onCancel()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <table *ngIf="accessories.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Accessory</th>
+          <th>Category</th>
+          <th>Brand</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let a of accessories">
+          <td>{{ a.id }}</td>
+          <td class="item-name">{{ a.name }}</td>
+          <td>{{ a.category?.name || '-' }}</td>
+          <td>{{ a.brand?.name || '-' }}</td>
+          <td>{{ a.price }} DT</td>
+          <td>
+            <span class="stock-badge">{{ a.stock }}</span>
+          </td>
+          <td class="actions">
+            <button class="edit" type="button" (click)="onEdit(a)">Edit</button>
+            <button class="delete" type="button" (click)="openDeleteModal(a)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="empty" *ngIf="accessories.length === 0">
+      No accessories found.
+    </div>
+
+  </section>
+
+  <div class="modal-backdrop" *ngIf="accessoryToDelete">
+    <div class="modal-box">
+      <h3>Delete Accessory</h3>
+      <p>
+        Are you sure you want to delete
+        <strong>{{ accessoryToDelete.name }}</strong>?
+      </p>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" type="button" (click)="cancelDelete()">No</button>
+        <button class="delete" type="button" (click)="confirmDelete()">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+</div>

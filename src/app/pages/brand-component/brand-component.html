@@ -1,76 +1,121 @@
-<div class="brand-page">
+<div class="admin-layout">
 
-  <!-- Header -->
-  <div class="page-header">
-    <div class="header-left">
-      <span class="label">MANAGEMENT</span>
-      <h1>Brands <span class="accent">_</span></h1>
-      <p class="subtitle">{{ brands.length }} brands registered</p>
-    </div>
-    <button class="btn-add" (click)="openForm()">
-      <span class="plus">+</span> New Brand
-    </button>
+  <section class="hero">
+    <h1>Brands Management</h1>
+    <p>Manage accessory brands</p>
+  </section>
+
+  <!-- message (success / error ) -->
+  <div
+    *ngIf="message"
+    class="message"
+    [class.success]="messageType === 'success'"
+    [class.error]="messageType === 'error'"
+  >
+    {{ message }}
   </div>
 
-  <!-- Form Panel -->
-  <div class="form-panel" [class.open]="showForm">
-    <div class="form-inner">
-      <h3>{{ isEditing ? 'Edit Brand' : 'Create Brand' }}</h3>
-      <div class="input-group">
-        <input
-          class="field"
-          [(ngModel)]="form.name"
-          placeholder="Brand name"
-          (keyup.enter)="save()"
-        />
-        <span class="input-line"></span>
-      </div>
-      <div class="form-actions">
-        <button class="btn-save" (click)="save()">
-          {{ isEditing ? 'Update' : 'Create' }}
-        </button>
-        <button class="btn-cancel" (click)="reset()">Cancel</button>
-      </div>
-    </div>
-  </div>
+  <section class="table-section">
 
-  <!-- Brand Grid -->
-  <div class="brand-grid">
-    <div
-      class="brand-card"
-      *ngFor="let brand of brands; let i = index"
-      [style.animation-delay]="i * 60 + 'ms'"
-    >
-      <div class="card-number">{{ (i + 1).toString().padStart(2, '0') }}</div>
-      <div class="card-body">
-        <div class="brand-icon">{{ brand.name.charAt(0).toUpperCase() }}</div>
-        <h4 class="brand-name">{{ brand.name }}</h4>
-        <div class="brand-id">ID #{{ brand.id }}</div>
+    <div class="table-header">
+      <div>
+        <h2>Brand List</h2>
+        <span>{{ brands.length }} brands</span>
       </div>
-      <div class="card-actions">
-        <button class="btn-edit" (click)="edit(brand); openForm()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-          </svg>
-          Edit
-        </button>
-        <button class="btn-delete" (click)="delete(brand.id!)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="3 6 5 6 21 6"/>
-            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-            <path d="M10 11v6M14 11v6"/>
-          </svg>
-          Delete
-        </button>
-      </div>
-      <div class="card-glow"></div>
+
+      <button class="btn-save" type="button" (click)="openForm()">
+        + Add Brand
+      </button>
     </div>
 
-    <!-- Empty State -->
-    <div class="empty-state" *ngIf="brands.length === 0">
-      <div class="empty-icon">◈</div>
-      <p>No brands yet. Create your first one.</p>
+    <!-- FORM -->
+    <section class="form-section" *ngIf="showForm">
+      <h2>{{ form.id ? 'Update Brand' : 'Create New Brand' }}</h2>
+
+      <form (ngSubmit)="save()">
+
+        <div class="form-group">
+          <label>Brand Name</label>
+
+          <input
+            type="text"
+            [(ngModel)]="form.name"
+            name="name"
+            placeholder="Example: Apple"
+          />
+
+          
+          <small class="field-error" *ngIf="submitted && !form.name.trim()">
+            Brand name is required.
+          </small>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-save">
+            {{ form.id ? 'Update Brand' : 'Add Brand' }}
+          </button>
+
+          <button type="button" class="btn-cancel" (click)="reset()">
+            Cancel
+          </button>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- TABLE -->
+    <table *ngIf="brands.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Brand</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let brand of brands">
+          <td>{{ brand.id }}</td>
+          <td class="brand-name">{{ brand.name }}</td>
+
+          <td class="actions">
+            <button class="edit" type="button" (click)="edit(brand)">
+              Edit
+            </button>
+
+            <button class="delete" type="button" (click)="openDeleteModal(brand)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="empty" *ngIf="brands.length === 0">
+      No brands found.
+    </div>
+
+  </section>
+
+  <!-- DELETE MODAL -->
+  <div class="modal-backdrop" *ngIf="brandToDelete">
+    <div class="modal-box">
+      <h3>Delete Brand</h3>
+
+      <p>
+        Are you sure you want to delete
+        <strong>{{ brandToDelete.name }}</strong>?
+      </p>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" type="button" (click)="cancelDelete()">
+          No
+        </button>
+
+        <button class="delete" type="button" (click)="confirmDelete()">
+          Yes, Delete
+        </button>
+      </div>
     </div>
   </div>
 
