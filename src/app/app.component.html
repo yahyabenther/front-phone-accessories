@@ -1,11 +1,11 @@
-<nav class="navbar">
+<nav class="navbar" *ngIf="authService.isLoggedIn()">
   <div class="logo">📱 AccessoryStore</div>
 
   <div class="nav-links">
     <a routerLink="/accessories" routerLinkActive="active">Accessories</a>
     <a routerLink="/categories" routerLinkActive="active">Categories</a>
     <a routerLink="/brands" routerLinkActive="active">Brands</a>
-    <a routerLink="/logout" class="logout">Logout</a>
+    <a (click)="onLogout()" class="logout" style="cursor: pointer;">Logout</a>
   </div>
 </nav>
 

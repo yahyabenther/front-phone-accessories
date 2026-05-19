@@ -1,13 +1,20 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet, RouterLinkWithHref } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from './services/auth'; // 👈 Points directly to your root application auth file
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLinkWithHref],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.scss'
+  styleUrls: ['./app.scss'] // Matches your style file extension
 })
-export class App {
-  protected readonly title = signal('phone-accessories');
+export class AppComponent {
+  constructor(public authService: AuthService, private router: Router) {}
+
+  onLogout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }
