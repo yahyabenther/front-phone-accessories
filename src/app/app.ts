@@ -13,6 +13,10 @@ import { CommonModule } from '@angular/common';
 export class AppComponent {
   constructor(public authService: AuthService, private router: Router) {}
 
+  get auth(): AuthService {
+    return this.authService;
+  }
+
   onLogout() {
     this.authService.logout();
     this.router.navigate(['/login']);
